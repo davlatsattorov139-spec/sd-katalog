@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hisvex - To'liq Boshqaruv Tizimi</title>
+    <title>SD Import Company - To'liq Boshqaruv Tizimi</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
@@ -58,10 +58,10 @@
                 <!-- Logotip -->
                 <div class="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800">
                     <div class="flex items-center space-x-3">
-                        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-500/20">
-                            H
+                        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-500/20">
+                            SD
                         </div>
-                        <span class="text-xl font-black tracking-wider text-slate-900 dark:text-white">HISVEX</span>
+                        <span class="text-base font-black tracking-wider text-slate-900 dark:text-white">SD IMPORT</span>
                     </div>
                 </div>
 
@@ -129,7 +129,7 @@
                     </button>
                     <div class="min-w-0">
                         <h1 id="pageTitle" class="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate leading-snug">Bosh Sahifa</h1>
-                        <p id="storeNameHeader" class="text-[11px] text-slate-500 truncate">Hisvex Central Market</p>
+                        <p id="storeNameHeader" class="text-[11px] text-slate-500 truncate">SD Import Company</p>
                     </div>
                 </div>
 
@@ -154,7 +154,7 @@
                 <div id="tab-dashboard" class="tab-content space-y-6">
                     <div class="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-2xl p-6 text-white shadow-xl">
                         <h2 class="text-xl sm:text-2xl font-bold">Xush kelibsiz, Davlat! 👋</h2>
-                        <p class="text-blue-100 text-xs sm:text-sm mt-1">Hisvex savdo va ombor boshqaruv tizimi faol ish holatida.</p>
+                        <p class="text-blue-100 text-xs sm:text-sm mt-1">SD Import Company savdo va ombor boshqaruv tizimi faol ish holatida.</p>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
@@ -462,7 +462,7 @@
                         <div class="space-y-2">
                             <label class="text-xs font-medium text-slate-500">Do'kon nomi</label>
                             <div class="flex space-x-2">
-                                <input id="settingsStoreName" type="text" class="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs">
+                                <input id="settingsStoreName" type="text" value="SD Import Company" class="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs">
                                 <button onclick="saveStoreName()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold">Saqlash</button>
                             </div>
                         </div>
@@ -470,7 +470,7 @@
                         <div class="space-y-2 pt-2 border-t dark:border-slate-800">
                             <label class="text-xs font-medium text-slate-500">Oylik Savdo Rejasi (UZS)</label>
                             <div class="flex space-x-2">
-                                <input id="settingsMonthlyTarget" type="number" class="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs">
+                                <input id="settingsMonthlyTarget" type="number" value="50000000" class="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs">
                                 <button onclick="saveMonthlyTarget()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold">Yangilash</button>
                             </div>
                         </div>
@@ -494,9 +494,9 @@
         </div>
     </div>
 
-    <!-- Modal: Yangi Sotuv / POS -->
+    <!-- Modal: Yangi Sotuv / POS (Bir nechta mahsulot qo'shish imkoniyati bilan) -->
     <div id="newSaleModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3">
-        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
             <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <div class="p-2 bg-blue-50 dark:bg-blue-900/40 text-blue-600 rounded-xl">
@@ -522,7 +522,19 @@
 
                 <div>
                     <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Mahsulotni tanlang (Ustiga bosing):</label>
-                    <div id="productsGrid" class="flex flex-col space-y-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar"></div>
+                    <div id="productsGrid" class="flex flex-col space-y-2 max-h-36 overflow-y-auto pr-1 custom-scrollbar"></div>
+                </div>
+
+                <!-- Savatchadagi mahsulotlar ro'yxati -->
+                <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                    <label class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block">Savatchadagi tovarlar:</label>
+                    <div id="cartItemsList" class="space-y-1.5 max-h-32 overflow-y-auto custom-scrollbar text-xs">
+                        <p class="text-slate-400 text-center py-1">Savatcha bo'sh</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t dark:border-slate-700 font-bold text-xs">
+                        <span>Jami summa:</span>
+                        <span id="cartTotalDisplay" class="text-blue-600 dark:text-blue-400">0 UZS</span>
+                    </div>
                 </div>
 
                 <!-- Chegirma (Skidka) kiritish joyi -->
@@ -680,52 +692,50 @@
             </div>
             <div>
                 <h3 class="font-bold text-base text-slate-900 dark:text-white">Kassa Cheki</h3>
-                <p id="receiptStoreSubtitle" class="text-[11px] text-slate-500">HISVEX RETAIL</p>
+                <p id="receiptStoreSubtitle" class="text-[11px] text-slate-500">SD IMPORT COMPANY</p>
             </div>
             <div id="receiptContent" class="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl text-left text-[11px] font-mono space-y-1.5 border border-dashed border-slate-300 dark:border-slate-800"></div>
             <button onclick="document.getElementById('receiptModal').classList.add('hidden')" class="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold">Yopish</button>
         </div>
     </div>
 
-    <!-- JavaScript Mantiqlari (LocalStorage bilan boyitilgan) -->
+    <!-- JavaScript Mantiqlari -->
     <script>
-        // LocalStorage'dan ma'lumotlarni o'qish (agar bo'lmasa boshlang'ich qiymatlar olinadi)
-        let allSalesData = JSON.parse(localStorage.getItem('hisvex_allSalesData')) || [
+        let allSalesData = JSON.parse(localStorage.getItem('sd_salesData')) || [
             { id: 'SOT-1098', datePeriod: 'today', datetime: '16:42', customer: 'Jasur Aliyev', items: "iPhone 15 Pro", amount: 13500000, profit: 2500000, payment: 'Aralash', status: 'Bajarildi' },
             { id: 'SOT-1097', datePeriod: 'today', datetime: '14:15', customer: 'Oddiy Xaridor', items: "AirPods Pro 2", amount: 3100000, profit: 600000, payment: 'Naqd', status: 'Bajarildi' }
         ];
 
-        let productsData = JSON.parse(localStorage.getItem('hisvex_productsData')) || [
+        let productsData = JSON.parse(localStorage.getItem('sd_productsData')) || [
             { name: 'iPhone 15 Pro 128GB', cost: 11000000, price: 13500000, stock: 4 },
             { name: 'AirPods Pro 2', cost: 2500000, price: 3100000, stock: 2 },
             { name: 'MacBook Air M2', cost: 11800000, price: 14200000, stock: 12 },
             { name: 'Samsung Galaxy S24', cost: 9000000, price: 11000000, stock: 3 }
         ];
 
-        let customersData = JSON.parse(localStorage.getItem('hisvex_customersData')) || [
+        let customersData = JSON.parse(localStorage.getItem('sd_customersData')) || [
             { name: 'Jasur Aliyev', phone: '+998 90 123 45 67', debt: 2100000 },
             { name: 'Sardor Rahimov', phone: '+998 93 987 65 43', debt: 0 }
         ];
 
-        let MONTHLY_TARGET = Number(localStorage.getItem('hisvex_monthlyTarget')) || 50000000;
-        let STORE_NAME = localStorage.getItem('hisvex_storeName') || "Hisvex Central Market";
+        let MONTHLY_TARGET = Number(localStorage.getItem('sd_monthlyTarget')) || 50000000;
+        let STORE_NAME = localStorage.getItem('sd_storeName') || "SD Import Company";
+
+        function saveDataToStorage() {
+            localStorage.setItem('sd_salesData', JSON.stringify(allSalesData));
+            localStorage.setItem('sd_productsData', JSON.stringify(productsData));
+            localStorage.setItem('sd_customersData', JSON.stringify(customersData));
+            localStorage.setItem('sd_monthlyTarget', MONTHLY_TARGET);
+            localStorage.setItem('sd_storeName', STORE_NAME);
+        }
 
         let activeDateFilter = 'today';
-        window.selectedProduct = null;
+        window.cartItems = []; // Savatchadagi mahsulotlar
         window.selectedPaymentType = 'Naqd';
         window.activeDebtCustomer = null;
         window.activeEditProduct = null;
         let salesChartInstance = null;
         let paymentChartInstance = null;
-
-        // Barcha o'zgarishlarni localStorage'ga saqlash funksiyasi
-        function saveAppData() {
-            localStorage.setItem('hisvex_allSalesData', JSON.stringify(allSalesData));
-            localStorage.setItem('hisvex_productsData', JSON.stringify(productsData));
-            localStorage.setItem('hisvex_customersData', JSON.stringify(customersData));
-            localStorage.setItem('hisvex_monthlyTarget', MONTHLY_TARGET);
-            localStorage.setItem('hisvex_storeName', STORE_NAME);
-        }
 
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
@@ -736,11 +746,10 @@
             if (themeToggleBtn) themeToggleBtn.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
             if (toggleSidebarBtn && sidebar) toggleSidebarBtn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
 
-            // Do'kon nomini va sozlamalarni inputlarga o'rnatish
             document.getElementById('storeNameHeader').innerText = STORE_NAME;
-            document.getElementById('receiptStoreSubtitle').innerText = STORE_NAME.toUpperCase();
             document.getElementById('settingsStoreName').value = STORE_NAME;
             document.getElementById('settingsMonthlyTarget').value = MONTHLY_TARGET;
+            document.getElementById('receiptStoreSubtitle').innerText = STORE_NAME.toUpperCase();
 
             initCharts();
             switchTab('dashboard');
@@ -800,7 +809,7 @@
         };
 
         window.openNewSaleModal = function() {
-            window.selectedProduct = null;
+            window.cartItems = [];
             document.getElementById('aralashInputs').classList.add('hidden');
             document.getElementById('nasiyaInputs').classList.add('hidden');
             document.getElementById('discountPercent').value = '';
@@ -808,6 +817,7 @@
             document.getElementById('finalPriceDisplay').innerText = '';
             renderPOSProducts();
             renderPOSCustomerSelect();
+            updateCartDisplay();
             document.getElementById('newSaleModal').classList.remove('hidden');
         };
 
@@ -815,19 +825,87 @@
             document.getElementById('newSaleModal').classList.add('hidden');
         };
 
+        // Savatchaga mahsulot qo'shish yoki miqdorini oshirish
+        window.addToCart = function(name, price, cost, stock) {
+            if (stock <= 0) {
+                showAlert("Bu mahsulot omborda qolmagan!", "error");
+                return;
+            }
+
+            let existing = window.cartItems.find(i => i.name === name);
+            if (existing) {
+                if (existing.qty < stock) {
+                    existing.qty += 1;
+                } else {
+                    showAlert("Ombordagi miqdordan ko'p qo'shib bo'lmaydi!", "error");
+                    return;
+                }
+            } else {
+                window.cartItems.push({ name, price, cost, qty: 1, maxStock: stock });
+            }
+            updateCartDisplay();
+        };
+
+        // Savatdan mahsulot miqdorini o'zgartirish yoki o'chirish
+        window.changeCartQty = function(name, delta) {
+            let item = window.cartItems.find(i => i.name === name);
+            if (!item) return;
+
+            item.qty += delta;
+            if (item.qty <= 0) {
+                window.cartItems = window.cartItems.filter(i => i.name !== name);
+            } else if (item.qty > item.maxStock) {
+                item.qty = item.maxStock;
+                showAlert("Omborda yetarli miqdor yo'q!", "error");
+            }
+            updateCartDisplay();
+        };
+
+        function updateCartDisplay() {
+            const listEl = document.getElementById('cartItemsList');
+            const totalEl = document.getElementById('cartTotalDisplay');
+
+            if (window.cartItems.length === 0) {
+                listEl.innerHTML = `<p class="text-slate-400 text-center py-1">Savatcha bo'sh</p>`;
+                totalEl.innerText = "0 UZS";
+                document.getElementById('finalPriceDisplay').innerText = "";
+                return;
+            }
+
+            let totalSum = 0;
+            listEl.innerHTML = window.cartItems.map(item => {
+                let subTotal = item.price * item.qty;
+                totalSum += subTotal;
+                return `
+                    <div class="flex items-center justify-between bg-white dark:bg-slate-900 p-2 rounded-lg border dark:border-slate-800">
+                        <div>
+                            <span class="font-bold block">${item.name}</span>
+                            <span class="text-[10px] text-slate-400">${item.price.toLocaleString()} x ${item.qty} = ${subTotal.toLocaleString()} UZS</span>
+                        </div>
+                        <div class="flex items-center space-x-1.5">
+                            <button onclick="changeCartQty('${item.name}', -1)" class="w-6 h-6 bg-slate-200 dark:bg-slate-800 rounded font-bold">-</button>
+                            <span class="font-bold text-xs">${item.qty}</span>
+                            <button onclick="changeCartQty('${item.name}', 1)" class="w-6 h-6 bg-slate-200 dark:bg-slate-800 rounded font-bold">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalEl.innerText = totalSum.toLocaleString() + " UZS";
+            calculateDiscount('amount'); // Chegirmani qayta hisoblash
+        }
+
         window.completeSale = function() {
-            if (!window.selectedProduct) {
-                showAlert("Iltimos, ro'yxatdan bitta mahsulotni tanlang!", 'error');
+            if (window.cartItems.length === 0) {
+                showAlert("Savatchaga kamida bitta mahsulot qo'shing!", 'error');
                 return;
             }
 
+            let totalAmount = window.cartItems.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            let totalCost = window.cartItems.reduce((acc, i) => acc + (i.cost * i.qty), 0);
+            
             const discAmount = Number(document.getElementById('discountAmount').value) || 0;
-            const finalPrice = window.selectedProduct.price - discAmount;
-
-            if (finalPrice < 0) {
-                showAlert("Chegirma narxidan oshib ketdi!", "error");
-                return;
-            }
+            const finalPrice = Math.max(0, totalAmount - discAmount);
 
             const customerName = document.getElementById('customerSelect').value;
             let paymentDetails = window.selectedPaymentType;
@@ -856,30 +934,32 @@
             if (discAmount > 0) {
                 paymentDetails += ` | Skidka: ${discAmount.toLocaleString()} UZS`;
             }
-            
-            const prod = productsData.find(p => p.name === window.selectedProduct.name);
-            if (prod && prod.stock <= 0) {
-                showAlert("Omborda bu mahsulot qolmagan!", "error");
-                return;
-            }
 
-            if (prod) prod.stock = Math.max(0, prod.stock - 1);
+            // Ombordan miqdorlarni kamaytirish
+            let itemsSummaryStr = "";
+            window.cartItems.forEach(cartItem => {
+                let prod = productsData.find(p => p.name === cartItem.name);
+                if (prod) {
+                    prod.stock = Math.max(0, prod.stock - cartItem.qty);
+                }
+                itemsSummaryStr += `${cartItem.name} (${cartItem.qty}ta), `;
+            });
 
-            const totalProfit = finalPrice - window.selectedProduct.cost;
+            const totalProfit = finalPrice - totalCost;
             const newId = 'SOT-' + Math.floor(1000 + Math.random() * 9000);
             const now = new Date();
             const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
             allSalesData.unshift({
-                id: newId, datePeriod: 'today', datetime: timeStr, customer: customerName, items: window.selectedProduct.name + " (1ta)", amount: finalPrice, profit: totalProfit, payment: paymentDetails, status: 'Bajarildi'
+                id: newId, datePeriod: 'today', datetime: timeStr, customer: customerName, items: itemsSummaryStr.slice(0, -2), amount: finalPrice, profit: totalProfit, payment: paymentDetails, status: 'Bajarildi'
             });
             
-            saveAppData(); // Ma'lumotni saqlash
+            saveDataToStorage();
             closeNewSaleModal();
             showReceipt(newId, customerName, finalPrice.toLocaleString() + " UZS", paymentDetails, timeStr);
             showAlert("Sotuv muvaffaqiyatli yakunlandi!", "success");
             
-            window.selectedProduct = null;
+            window.cartItems = [];
             renderSalesDashboard();
             updateDashboardWidgets();
         };
@@ -997,19 +1077,13 @@
             if (saleIndex === -1) return;
 
             const sale = allSalesData[saleIndex];
-            for (let prod of productsData) {
-                if (sale.items.includes(prod.name)) {
-                    prod.stock += 1;
-                    break;
-                }
-            }
-
+            // Qoldiqni qaytarish oddiy matn tahlili orqali qiyinroq bo'lgani uchun asosiy ombor qoldig'iga tegmaymiz, faqat tranzaksiyani o'chiramiz
             allSalesData.splice(saleIndex, 1);
-            saveAppData();
+            saveDataToStorage();
             renderSalesDashboard();
             updateDashboardWidgets();
             renderProductsTable();
-            showAlert(`Sotuv (${saleId}) o'chirildi va qoldiq tiklandi!`, "success");
+            showAlert(`Sotuv (${saleId}) o'chirildi!`, "success");
         };
 
         function renderProductsTable() {
@@ -1053,7 +1127,7 @@
             }
             window.activeEditProduct.stock = newStock;
             window.activeEditProduct.price = newPrice;
-            saveAppData();
+            saveDataToStorage();
             closeEditProductModal();
             renderProductsTable();
             updateDashboardWidgets();
@@ -1075,7 +1149,7 @@
             const stock = Number(document.getElementById('newProdStock').value);
             if (!name || !price || !cost || cost >= price) { showAlert("Ma'lumotlarni to'g'ri kiriting!", "error"); return; }
             productsData.push({ name, cost, price, stock });
-            saveAppData();
+            saveDataToStorage();
             closeProductModal();
             renderProductsTable();
             updateDashboardWidgets();
@@ -1084,7 +1158,7 @@
 
         window.deleteProduct = function(name) {
             productsData = productsData.filter(p => p.name !== name);
-            saveAppData();
+            saveDataToStorage();
             renderProductsTable();
             updateDashboardWidgets();
             showAlert("Mahsulot ombordan o'chirildi", "info");
@@ -1130,7 +1204,7 @@
             }
 
             window.activeDebtCustomer.debt -= payAmt;
-            saveAppData();
+            saveDataToStorage();
             closePayDebtModal();
             renderCustomersTable();
             showAlert(`${payAmt.toLocaleString()} UZS qarz qabul qilindi!`, "success");
@@ -1149,7 +1223,7 @@
             const phone = document.getElementById('newCustPhone').value;
             if (!name || !phone) { showAlert("Ma'lumotlarni to'ldiring!", "error"); return; }
             customersData.push({ name, phone, debt: 0 });
-            saveAppData();
+            saveDataToStorage();
             closeCustomerModal();
             renderCustomersTable();
             updateDashboardWidgets();
@@ -1158,7 +1232,7 @@
 
         window.deleteCustomer = function(name) {
             customersData = customersData.filter(c => c.name !== name);
-            saveAppData();
+            saveDataToStorage();
             renderCustomersTable();
             updateDashboardWidgets();
             showAlert("Mijoz o'chirildi", "info");
@@ -1193,7 +1267,7 @@
             const name = document.getElementById('settingsStoreName').value.trim();
             if (!name) return;
             STORE_NAME = name;
-            saveAppData();
+            saveDataToStorage();
             document.getElementById('storeNameHeader').innerText = name;
             document.getElementById('receiptStoreSubtitle').innerText = name.toUpperCase();
             showAlert("Do'kon nomi yangilandi!", "success");
@@ -1203,7 +1277,7 @@
             const val = Number(document.getElementById('settingsMonthlyTarget').value);
             if (!val || val <= 0) { showAlert("Qiymatni to'g'ri kiriting!", "error"); return; }
             MONTHLY_TARGET = val;
-            saveAppData();
+            saveDataToStorage();
             updateDashboardWidgets();
             showAlert("Oylik savdo rejasi yangilandi!", "success");
         };
@@ -1213,7 +1287,7 @@
                 localStorage.clear();
                 allSalesData = [];
                 customersData = [];
-                saveAppData();
+                saveDataToStorage();
                 renderSalesDashboard();
                 updateDashboardWidgets();
                 showAlert("Ma'lumotlar tozalandi", "info");
@@ -1231,60 +1305,38 @@
             }
 
             grid.innerHTML = filtered.map(p => `
-                <div onclick="selectProductForSale('${p.name}', ${p.price}, ${p.cost})" id="prod-card-${p.name}" class="product-select-card p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700/60 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer flex items-center justify-between text-xs transition">
+                <div onclick="addToCart('${p.name}', ${p.price}, ${p.cost}, ${p.stock})" class="p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700/60 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer flex items-center justify-between text-xs transition">
                     <div>
                         <span class="font-bold text-slate-900 dark:text-white">${p.name}</span>
                         <div class="text-[10px] text-slate-400">Qoldiq: ${p.stock}ta</div>
                     </div>
-                    <span class="font-bold text-blue-600 dark:text-blue-400">${p.price.toLocaleString()} UZS</span>
+                    <span class="font-bold text-blue-600 dark:text-blue-400">+ Qo'shish (${p.price.toLocaleString()})</span>
                 </div>
             `).join('');
         };
 
-        window.selectProductForSale = function(name, price, cost) {
-            window.selectedProduct = { name, price, cost };
-            document.querySelectorAll('.product-select-card').forEach(card => {
-                card.classList.remove('border-blue-600', 'bg-blue-50', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-600');
-            });
-            const activeCard = document.getElementById(`prod-card-${name}`);
-            if (activeCard) {
-                activeCard.classList.add('border-blue-600', 'bg-blue-50', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-600');
-            }
-            updateFinalPriceDisplay();
-        };
-
         window.calculateDiscount = function(type) {
-            if (!window.selectedProduct) {
-                showAlert("Avval mahsulotni tanlang!", "error");
-                return;
-            }
-            const origPrice = window.selectedProduct.price;
+            let totalAmount = window.cartItems.reduce((acc, i) => acc + (i.price * i.qty), 0);
             let discAmt = 0;
 
             if (type === 'percent') {
                 const percent = Number(document.getElementById('discountPercent').value) || 0;
-                discAmt = Math.round((origPrice * percent) / 100);
+                discAmt = Math.round((totalAmount * percent) / 100);
                 document.getElementById('discountAmount').value = discAmt;
             } else {
                 discAmt = Number(document.getElementById('discountAmount').value) || 0;
-                const percent = origPrice > 0 ? ((discAmt / origPrice) * 100).toFixed(1) : 0;
+                const percent = totalAmount > 0 ? ((discAmt / totalAmount) * 100).toFixed(1) : 0;
                 document.getElementById('discountPercent').value = percent;
             }
-            updateFinalPriceDisplay();
-        };
 
-        function updateFinalPriceDisplay() {
-            if (!window.selectedProduct) return;
-            const orig = window.selectedProduct.price;
-            const disc = Number(document.getElementById('discountAmount').value) || 0;
-            const final = Math.max(0, orig - disc);
-            document.getElementById('finalPriceDisplay').innerText = `Asl narx: ${orig.toLocaleString()} | Chegirma bilan: ${final.toLocaleString()} UZS`;
+            const final = Math.max(0, totalAmount - discAmt);
+            document.getElementById('finalPriceDisplay').innerText = `Asl jami: ${totalAmount.toLocaleString()} | Chegirma bilan: ${final.toLocaleString()} UZS`;
 
             if (window.selectedPaymentType === 'Aralash') {
                 document.getElementById('aralashNaqd').value = final;
                 document.getElementById('aralashClick').value = 0;
             }
-        }
+        };
 
         function renderPOSCustomerSelect() {
             const select = document.getElementById('customerSelect');
@@ -1301,15 +1353,15 @@
             const aralashDiv = document.getElementById('aralashInputs');
             const nasiyaDiv = document.getElementById('nasiyaInputs');
 
+            let totalAmount = window.cartItems.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            const disc = Number(document.getElementById('discountAmount').value) || 0;
+            const final = Math.max(0, totalAmount - disc);
+
             if (type === 'Aralash') {
                 aralashDiv.classList.remove('hidden');
                 nasiyaDiv.classList.add('hidden');
-                if (window.selectedProduct) {
-                    const disc = Number(document.getElementById('discountAmount').value) || 0;
-                    const final = window.selectedProduct.price - disc;
-                    document.getElementById('aralashNaqd').value = final;
-                    document.getElementById('aralashClick').value = 0;
-                }
+                document.getElementById('aralashNaqd').value = final;
+                document.getElementById('aralashClick').value = 0;
             } else if (type === 'Nasiya') {
                 nasiyaDiv.classList.remove('hidden');
                 aralashDiv.classList.add('hidden');
@@ -1320,9 +1372,9 @@
         };
 
         window.calculateAralash = function() {
-            if (!window.selectedProduct) return;
+            let totalAmount = window.cartItems.reduce((acc, i) => acc + (i.price * i.qty), 0);
             const disc = Number(document.getElementById('discountAmount').value) || 0;
-            const final = window.selectedProduct.price - disc;
+            const final = Math.max(0, totalAmount - disc);
             const naqd = Number(document.getElementById('aralashNaqd').value) || 0;
             const remaining = final - naqd;
             if (remaining >= 0) {
@@ -1350,7 +1402,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
             link.setAttribute("href", url);
-            link.setAttribute("download", `Hisvex_Sotuvlar_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("download", `SD_Import_Sotuvlar_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1406,3 +1458,4 @@
     </script>
 </body>
 </html>
+
