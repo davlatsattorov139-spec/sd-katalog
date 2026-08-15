@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="uz" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hisvex - To'liq Boshqaruv Tizimi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        hisvex: {
+                            blue: '#1e40af',
+                            indigo: '#3b82f6',
+                            dark: '#0f172a',
+                            cardDark: '#1e293b'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+    <div class="flex h-screen overflow-hidden">
+
+        <!-- Yon panel / Sidebar -->
+        <aside id="sidebar" class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between transition-all duration-300 z-30 flex-shrink-0 hidden md:flex">
+            <div>
+                <!-- Logotip -->
+                <div class="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-blue-500/20">
+                            H
+                        </div>
+                        <span class="text-xl font-black tracking-wider text-slate-900 dark:text-white">HISVEX</span>
+                    </div>
+                </div>
+
+                <!-- Menyu Navigatsiyasi -->
+                <nav class="p-3 space-y-1.5" id="mainNav">
+                    <button onclick="switchTab('dashboard')" data-tab="dashboard" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        <span>Bosh sahifa</span>
+                    </button>
+                    
+                    <button onclick="switchTab('sales')" data-tab="sales" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="shopping-cart" class="w-4 h-4"></i>
+                        <span>Sotuvlar</span>
+                    </button>
+
+                    <button onclick="switchTab('products')" data-tab="products" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="package" class="w-4 h-4"></i>
+                        <span>Mahsulotlar</span>
+                    </button>
+
+                    <button onclick="switchTab('customers')" data-tab="customers" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="users" class="w-4 h-4"></i>
+                        <span>Mijozlar</span>
+                    </button>
+
+                    <button onclick="switchTab('warehouse')" data-tab="warehouse" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="warehouse" class="w-4 h-4"></i>
+                        <span>Omborxona</span>
+                    </button>
+
+                    <button onclick="switchTab('reports')" data-tab="reports" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        <span>Hisobotlar</span>
+                    </button>
+
+                    <button onclick="switchTab('settings')" data-tab="settings" class="nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                        <span>Sozlamalar</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Foydalanuvchi Ma'lumoti -->
+            <div class="p-3 border-t border-slate-200 dark:border-slate-800">
+                <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-2.5 flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                        D
+                    </div>
+                    <div class="flex-1 overflow-hidden">
+                        <h4 class="text-xs font-bold text-slate-900 dark:text-white truncate">Davlat</h4>
+                        <p class="text-[11px] text-slate-500 truncate">Administrator</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Asosiy Tarkib -->
+        <div class="flex-1 flex flex-col h-screen overflow-y-auto custom-scrollbar w-full min-w-0">
+
+            <!-- Yuqori panel / Header -->
+            <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 h-16 px-4 sm:px-6 flex items-center justify-between sticky top-0 z-20 flex-shrink-0 gap-2">
+                <div class="flex items-center space-x-3 min-w-0 flex-1">
+                    <button id="toggleSidebar" class="p-2 rounded-xl text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    <div class="min-w-0">
+                        <h1 id="pageTitle" class="text-sm sm:text-base font-bold text-slate-900 dark:text-white truncate leading-snug">Bosh Sahifa</h1>
+                        <p id="storeNameHeader" class="text-[11px] text-slate-500 truncate">Hisvex Central Market</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 shrink-0">
+                    <button onclick="openNewSaleModal()" class="flex items-center justify-center space-x-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold shadow-md shadow-blue-600/20 transition-all whitespace-nowrap">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span>Yangi Sotuv (POS)</span>
+                    </button>
+
+                    <button id="themeToggle" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0">
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                        <i data-lucide="moon" class="w-4 h-4 block dark:hidden"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Kontenti -->
+            <main class="p-4 sm:p-6 space-y-6 flex-1">
+                <div id="notificationArea"></div>
+
+                <!-- TAB 1: Bosh Sahifa -->
+                <div id="tab-dashboard" class="tab-content space-y-6">
+                    <div class="bg-gradient-to-r from-blue-700 to-indigo-600 rounded-2xl p-6 text-white shadow-xl">
+                        <h2 class="text-xl sm:text-2xl font-bold">Xush kelibsiz, Davlat! 👋</h2>
+                        <p class="text-blue-100 text-xs sm:text-sm mt-1">Hisvex savdo va ombor boshqaruv tizimi faol ish holatida.</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="text-xs font-semibold text-slate-500 uppercase">Oylik Reja bajarilishi</h4>
+                            <div class="mt-2 flex items-baseline justify-between">
+                                <span id="dashMonthlyPlanPercent" class="text-2xl font-bold">0%</span>
+                                <span id="dashMonthlyPlanText" class="text-xs text-slate-400 font-semibold">0 / 50M UZS</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+                                <div id="dashMonthlyProgressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="text-xs font-semibold text-slate-500 uppercase">Aktiv Mijozlar</h4>
+                            <div class="mt-2 flex items-baseline justify-between">
+                                <span id="dashActiveCustomersCount" class="text-2xl font-bold">0 ta</span>
+                                <span class="text-xs text-emerald-500 font-semibold">Bazada</span>
+                            </div>
+                            <p class="text-xs text-slate-400 mt-3">Mijozlar ro'yxatiga ulangan</p>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <h4 class="text-xs font-semibold text-slate-500 uppercase">Omborda Kam Qolganlar</h4>
+                            <div class="mt-2 flex items-baseline justify-between">
+                                <span id="dashLowStockCount" class="text-2xl font-bold text-slate-900 dark:text-white">0 xil</span>
+                                <span id="dashLowStockBadge" class="text-xs text-emerald-500 font-semibold">Hammasi joyida</span>
+                            </div>
+                            <p id="dashLowStockDesc" class="text-xs text-slate-400 mt-3">Minimal limitdan kam tovar yo'q</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: Sotuvlar -->
+                <div id="tab-sales" class="tab-content hidden space-y-6">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <div class="flex items-center space-x-2 flex-wrap gap-2">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Sana:</span>
+                            <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-1 overflow-x-auto w-full sm:w-auto" id="dateFilterGroup">
+                                <button onclick="setDateFilter('today')" data-filter="today" class="date-filter-btn flex-1 sm:flex-none px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm whitespace-nowrap">Bugun</button>
+                                <button onclick="setDateFilter('yesterday')" data-filter="yesterday" class="date-filter-btn flex-1 sm:flex-none px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 whitespace-nowrap">Kecha</button>
+                                <button onclick="setDateFilter('week')" data-filter="week" class="date-filter-btn flex-1 sm:flex-none px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 whitespace-nowrap">Shu hafta</button>
+                                <button onclick="setDateFilter('month')" data-filter="month" class="date-filter-btn flex-1 sm:flex-none px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 whitespace-nowrap">Shu oy</button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-2.5">
+                            <div class="relative flex-1 md:w-64">
+                                <input id="tableSearchInput" type="text" oninput="filterSalesTable()" placeholder="Sotuv yoki mijozni izlash..." class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 text-slate-900 dark:text-slate-100">
+                                <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-2.5 text-slate-400"></i>
+                            </div>
+                            <button onclick="exportTableToExcel()" class="flex items-center space-x-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-semibold shadow-sm transition whitespace-nowrap shrink-0">
+                                <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+                                <span>Excel</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Kartalar -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm relative overflow-hidden">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider" id="kpiSalesTitle">Bugungi Sotuv</p>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1" id="kpiSalesTotal">0 UZS</h3>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/40 flex items-center justify-center text-blue-600">
+                                    <i data-lucide="banknote" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-xs text-slate-500" id="kpiSalesSub">0 UZS tushum</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Sotuvlar Soni</p>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1" id="kpiSalesCount">0 ta</h3>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-900/40 flex items-center justify-center text-emerald-600">
+                                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-xs text-slate-500">Tranzaksiyalar soni</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">O'rtacha Chek</p>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1" id="kpiAvgCheck">0 UZS</h3>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-900/40 flex items-center justify-center text-purple-600">
+                                    <i data-lucide="receipt" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-xs text-slate-500">Har bir xarid uchun</div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Sof Foyda</p>
+                                    <h3 class="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1" id="kpiNetProfit">0 UZS</h3>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-900/40 flex items-center justify-center text-amber-600">
+                                    <i data-lucide="coins" class="w-5 h-5"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3 text-xs text-slate-500">Tannarx asosida</div>
+                        </div>
+                    </div>
+
+                    <!-- Grafiklar -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm min-w-0">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">Sotuv Dinamikasi</h3>
+                                    <p class="text-xs text-slate-500">Vaqtlar bo'yicha tahlil</p>
+                                </div>
+                                <span class="px-2.5 py-1 text-xs font-semibold bg-blue-50 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400 rounded-lg">Real vaqt</span>
+                            </div>
+                            <div class="h-56 sm:h-64 relative w-full">
+                                <canvas id="salesChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between min-w-0">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="font-bold text-sm sm:text-base text-slate-900 dark:text-white">To'lov Turlari</h3>
+                                    <i data-lucide="pie-chart" class="w-5 h-5 text-slate-400"></i>
+                                </div>
+                                <div class="h-44 sm:h-48 relative flex items-center justify-center w-full">
+                                    <canvas id="paymentMethodChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 text-xs">
+                                <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span><span id="legendNaqd">Naqd: 0%</span></div>
+                                <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span><span id="legendClick">Click: 0%</span></div>
+                                <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span><span id="legendNasiya">Nasiya: 0%</span></div>
+                                <div class="flex items-center space-x-2"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span><span id="legendAralash">Aralash: 0%</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jadval -->
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+                        <div class="p-4 sm:p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+                            <div>
+                                <h3 class="font-bold text-slate-900 dark:text-white text-sm sm:text-base">So'nggi Sotuv Tranzaksiyalari</h3>
+                                <p class="text-xs text-slate-500">Kassa amaliyotlari tarixi</p>
+                            </div>
+                            <select id="paymentFilterSelect" onchange="filterSalesTable()" class="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300">
+                                <option value="all">Barcha to'lovlar</option>
+                                <option value="Naqd">Naqd</option>
+                                <option value="Click">Click</option>
+                                <option value="Nasiya">Nasiya</option>
+                                <option value="Aralash">Aralash</option>
+                            </select>
+                        </div>
+
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs sm:text-sm text-slate-600 dark:text-slate-300 min-w-[650px]">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50 text-[11px] text-slate-500 uppercase font-semibold">
+                                    <tr>
+                                        <th class="px-4 sm:px-6 py-3">ID #</th>
+                                        <th class="px-4 sm:px-6 py-3">Vaqt</th>
+                                        <th class="px-4 sm:px-6 py-3">Mijoz</th>
+                                        <th class="px-4 sm:px-6 py-3">Mahsulotlar</th>
+                                        <th class="px-4 sm:px-6 py-3">To'lov Usuli</th>
+                                        <th class="px-4 sm:px-6 py-3">Summa</th>
+                                        <th class="px-4 sm:px-6 py-3">Holati</th>
+                                        <th class="px-4 sm:px-6 py-3 text-right">Amal</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500">
+                            Jami <span id="totalItemsCount" class="font-bold text-slate-800 dark:text-slate-200">0</span> ta sotuv ko'rsatilmoqda
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 3: Mahsulotlar -->
+                <div id="tab-products" class="tab-content hidden space-y-6">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h3 class="font-bold text-base">Mahsulotlar Bazasi</h3>
+                        <button onclick="openProductModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-1.5 shadow-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Mahsulot Qo'shish</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <div class="overflow-x-auto custom-scrollbar">
+                            <table class="w-full text-left text-xs sm:text-sm text-slate-600 dark:text-slate-300 min-w-[550px]">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-500 uppercase font-semibold">
+                                    <tr>
+                                        <th class="px-3 py-3 w-[32%]">Nomi</th>
+                                        <th class="px-2 py-3 w-[18%]">Tannarx</th>
+                                        <th class="px-2 py-3 w-[18%]">Narx</th>
+                                        <th class="px-2 py-3 w-[14%]">Qoldiq</th>
+                                        <th class="px-3 py-3 text-right w-[18%]">Amallar</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 4: Mijozlar -->
+                <div id="tab-customers" class="tab-content hidden space-y-6">
+                    <div class="flex justify-between items-center bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h3 class="font-bold text-base">Mijozlar Ro'yxati va Qarzlar</h3>
+                        <button onclick="openCustomerModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center space-x-1.5 shadow-sm">
+                            <i data-lucide="user-plus" class="w-4 h-4"></i>
+                            <span>Yangi Mijoz</span>
+                        </button>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                        <table class="w-full text-left text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-500 uppercase font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3">Mijoz F.I.Sh.</th>
+                                    <th class="px-4 py-3">Telefon raqami</th>
+                                    <th class="px-4 py-3">Jami Qarzi</th>
+                                    <th class="px-4 py-3 text-right">Amallar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 5: Omborxona -->
+                <div id="tab-warehouse" class="tab-content hidden space-y-6">
+                    <div class="bg-white dark:bg-slate-900 p-5 sm:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <h3 class="font-bold text-base mb-1">Omborda Kam Qolgan Mahsulotlar (&lt; 5 ta)</h3>
+                        <p class="text-xs text-slate-500 mb-4">Minimal limitdan oz qolgan tovarlar nazorati</p>
+                        
+                        <table class="w-full text-left text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-500 uppercase font-semibold">
+                                <tr>
+                                    <th class="px-4 py-3">Mahsulot Nomi</th>
+                                    <th class="px-4 py-3">Sotuv Narxi</th>
+                                    <th class="px-4 py-3">Qoldiq</th>
+                                    <th class="px-4 py-3">Holati</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lowStockTableBody" class="divide-y divide-slate-200 dark:divide-slate-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- TAB 6: Hisobotlar -->
+                <div id="tab-reports" class="tab-content hidden space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Jami Tushum (Oylik)</span>
+                            <h3 id="reportTotalRevenue" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0 UZS</h3>
+                            <p class="text-xs text-emerald-500 mt-2">Barcha savdolar yig'indisi</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Sof Foyda</span>
+                            <h3 id="reportNetProfit" class="text-2xl font-bold text-slate-900 dark:text-white mt-1">0 UZS</h3>
+                            <p class="text-xs text-blue-500 mt-2">Tannarx chegirilgandagi sof foyda</p>
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <span class="text-xs font-semibold text-slate-500 uppercase">Jami Qarzlar</span>
+                            <h3 id="reportTotalDebt" class="text-2xl font-bold text-red-500 mt-1">0 UZS</h3>
+                            <p class="text-xs text-slate-400 mt-2">Mijozlardagi jami nasiya qarz</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Eng ko'p sotilgan mahsulotlar</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-500 uppercase font-semibold">
+                                    <tr>
+                                        <th class="px-4 py-3">Mahsulot Nomi</th>
+                                        <th class="px-4 py-3">Sotilgan miqdor</th>
+                                        <th class="px-4 py-3">Umumiy Tushum</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topProductsReportBody" class="divide-y divide-slate-200 dark:divide-slate-800">
+                                    <tr><td colspan="3" class="px-4 py-4 text-center text-slate-400">Ma'lumotlar yetarli emas</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 7: Sozlamalar -->
+                <div id="tab-settings" class="tab-content hidden space-y-6">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5 text-sm">
+                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Tizim Sozlamalari</h3>
+                        
+                        <div class="space-y-2">
+                            <label class="text-xs font-medium text-slate-500">Do'kon nomi</label>
+                            <div class="flex space-x-2">
+                                <input id="settingsStoreName" type="text" class="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs">
+                                <button onclick="saveStoreName()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold">Saqlash</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t dark:border-slate-800">
+                            <label class="text-xs font-medium text-slate-500">Oylik Savdo Rejasi (UZS)</label>
+                            <div class="flex space-x-2">
+                                <input id="settingsMonthlyTarget" type="number" class="flex-1 p-2.5 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs">
+                                <button onclick="saveMonthlyTarget()" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold">Yangilash</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t dark:border-slate-800">
+                            <label class="text-xs font-medium text-slate-500">Ma'lumotlar bazasi va zaxira</label>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="exportTableToExcel()" class="px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5">
+                                    <i data-lucide="download" class="w-4 h-4"></i>
+                                    <span>Barcha ma'lumotlarni yuklab olish (Backup)</span>
+                                </button>
+                                <button onclick="resetAllData()" class="px-4 py-2 bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 rounded-xl text-xs font-semibold">
+                                    Ma'lumotlarni tozalash
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal: Yangi Sotuv / POS -->
+    <div id="newSaleModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-3">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full max-h-[90vh] flex flex-col overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
+            <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="p-2 bg-blue-50 dark:bg-blue-900/40 text-blue-600 rounded-xl">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    </div>
+                    <h3 class="font-bold text-base text-slate-900 dark:text-white">Tezkor Sotuv (POS)</h3>
+                </div>
+                <button onclick="closeNewSaleModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <div class="p-4 overflow-y-auto space-y-4 flex-1 custom-scrollbar">
+                <div>
+                    <label class="text-xs font-medium text-slate-500">Mijozni tanlang</label>
+                    <select id="customerSelect" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs"></select>
+                </div>
+
+                <div class="relative">
+                    <input id="productSearchInput" type="text" oninput="renderPOSProducts(this.value)" placeholder="Mahsulot nomini izlash..." class="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-xs focus:ring-2 focus:ring-blue-600">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+                </div>
+
+                <div>
+                    <label class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 block">Mahsulotni tanlang (Ustiga bosing):</label>
+                    <div id="productsGrid" class="flex flex-col space-y-2 max-h-40 overflow-y-auto pr-1 custom-scrollbar"></div>
+                </div>
+
+                <!-- Chegirma (Skidka) kiritish joyi -->
+                <div class="bg-slate-50 dark:bg-slate-800/40 p-3 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                    <label class="text-[11px] font-semibold text-slate-700 dark:text-slate-300 block">Chegirma (Skidka):</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="text-[10px] text-slate-400">Foizda (%)</label>
+                            <input id="discountPercent" type="number" oninput="calculateDiscount('percent')" class="w-full p-1.5 bg-white dark:bg-slate-900 border rounded-lg text-xs" placeholder="0">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400">Summada (UZS)</label>
+                            <input id="discountAmount" type="number" oninput="calculateDiscount('amount')" class="w-full p-1.5 bg-white dark:bg-slate-900 border rounded-lg text-xs" placeholder="0">
+                        </div>
+                    </div>
+                    <div id="finalPriceDisplay" class="text-xs font-bold text-blue-600 dark:text-blue-400 pt-1"></div>
+                </div>
+
+                <div>
+                    <label class="text-xs font-medium text-slate-500">To'lov turi</label>
+                    <div class="grid grid-cols-2 gap-1.5 mt-1" id="paymentButtonsGroup">
+                        <button type="button" onclick="selectPayment('Naqd')" class="payment-btn p-2 border rounded-xl text-xs font-semibold text-center bg-blue-600 text-white border-blue-600">Naqd</button>
+                        <button type="button" onclick="selectPayment('Click')" class="payment-btn p-2 border rounded-xl text-xs font-semibold text-center bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700">Click</button>
+                        <button type="button" onclick="selectPayment('Nasiya')" class="payment-btn p-2 border rounded-xl text-xs font-semibold text-center bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700">Nasiya</button>
+                        <button type="button" onclick="selectPayment('Aralash')" class="payment-btn p-2 border rounded-xl text-xs font-semibold text-center bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700">Aralash</button>
+                    </div>
+                </div>
+
+                <!-- Aralash to'lov uchun dinamik maydonlar -->
+                <div id="aralashInputs" class="hidden space-y-2 bg-slate-50 dark:bg-slate-800/50 p-3 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <span class="text-[11px] font-semibold text-blue-600 dark:text-blue-400 block">Aralash to'lov taqsimoti:</span>
+                    <div>
+                        <label class="text-[10px] text-slate-500">Naqd beriladigan summa (UZS)</label>
+                        <input id="aralashNaqd" type="number" oninput="calculateAralash()" class="w-full p-1.5 bg-white dark:bg-slate-900 border rounded-lg text-xs" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-500">Click/Karta orqali (UZS)</label>
+                        <input id="aralashClick" type="number" class="w-full p-1.5 bg-white dark:bg-slate-900 border rounded-lg text-xs" placeholder="0" readonly>
+                    </div>
+                </div>
+
+                <!-- Nasiya to'lov uchun dinamik maydonlar -->
+                <div id="nasiyaInputs" class="hidden space-y-2 bg-amber-50 dark:bg-amber-950/30 p-3 rounded-xl border border-amber-200 dark:border-amber-900/50">
+                    <span class="text-[11px] font-semibold text-amber-600 dark:text-amber-400 block">Nasiya ma'lumotlari:</span>
+                    <div>
+                        <label class="text-[10px] text-slate-500">Boshlang'ich to'lov (Naqd/Karta, UZS)</label>
+                        <input id="nasiyaBoshlangich" type="number" class="w-full p-1.5 bg-white dark:bg-slate-900 border rounded-lg text-xs" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="text-[10px] text-slate-500">Nasiya muddati (kunlarda)</label>
+                        <input id="nasiyaMuddati" type="number" class="w-full p-1.5 bg-white dark:bg-slate-900 border rounded-lg text-xs" placeholder="30">
+                    </div>
+                </div>
+
+                <button onclick="completeSale()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-md text-xs transition">
+                    Sotuvni Yakunlash & Chek Chiqarish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Mahsulotni Tahrirlash -->
+    <div id="editProductModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white" id="editProductTitle">Mahsulotni Tahrirlash</h3>
+            <div class="space-y-2.5">
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Ombordagi miqdori (dona)</label>
+                    <input id="editProdStock" type="number" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="0">
+                </div>
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Sotuv Narxi (UZS)</label>
+                    <input id="editProdPrice" type="number" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="0">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeEditProductModal()" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-xs font-bold">Bekor qilish</button>
+                <button onclick="confirmEditProduct()" class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold">Saqlash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Qarzni To'lash -->
+    <div id="payDebtModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white" id="payDebtTitle">Qarzni To'lash</h3>
+            <div class="space-y-2.5">
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">To'lanayotgan summa (UZS)</label>
+                    <input id="debtPaymentAmount" type="number" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="0">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closePayDebtModal()" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-xs font-bold">Bekor qilish</button>
+                <button onclick="confirmPayDebt()" class="flex-1 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold">To'lovni Qabul Qilish</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Mahsulot Qo'shish -->
+    <div id="productModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Yangi Mahsulot Qo'shish</h3>
+            <div class="space-y-2.5">
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Nomi</label>
+                    <input id="newProdName" type="text" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="Masalan: iPhone 15">
+                </div>
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Tannarxi (UZS)</label>
+                    <input id="newProdCost" type="number" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="10000000">
+                </div>
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Sotuv Narxi (UZS)</label>
+                    <input id="newProdPrice" type="number" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="12000000">
+                </div>
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Qoldiq (dona)</label>
+                    <input id="newProdStock" type="number" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="10">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeProductModal()" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-xs font-bold">Bekor qilish</button>
+                <button onclick="saveNewProduct()" class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold">Saqlash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Mijoz Qo'shish -->
+    <div id="customerModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-3">
+            <h3 class="font-bold text-base text-slate-900 dark:text-white">Yangi Mijoz Qo'shish</h3>
+            <div class="space-y-2.5">
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">F.I.Sh.</label>
+                    <input id="newCustName" type="text" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="Ism Familiya">
+                </div>
+                <div>
+                    <label class="text-[11px] font-medium text-slate-500">Telefon</label>
+                    <input id="newCustPhone" type="text" class="w-full mt-1 p-2 bg-slate-50 dark:bg-slate-800 border rounded-xl text-xs" placeholder="+998 90 000 00 00">
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2">
+                <button onclick="closeCustomerModal()" class="flex-1 py-2 bg-slate-200 dark:bg-slate-800 rounded-xl text-xs font-bold">Bekor qilish</button>
+                <button onclick="saveNewCustomer()" class="flex-1 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold">Saqlash</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Chek -->
+    <div id="receiptModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-xs w-full p-5 shadow-2xl border border-slate-200 dark:border-slate-800 text-center space-y-3">
+            <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                <i data-lucide="check" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-base text-slate-900 dark:text-white">Kassa Cheki</h3>
+                <p id="receiptStoreSubtitle" class="text-[11px] text-slate-500">HISVEX RETAIL</p>
+            </div>
+            <div id="receiptContent" class="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl text-left text-[11px] font-mono space-y-1.5 border border-dashed border-slate-300 dark:border-slate-800"></div>
+            <button onclick="document.getElementById('receiptModal').classList.add('hidden')" class="w-full py-2 bg-blue-600 text-white rounded-xl text-xs font-bold">Yopish</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Mantiqlari (LocalStorage bilan boyitilgan) -->
+    <script>
+        // LocalStorage'dan ma'lumotlarni o'qish (agar bo'lmasa boshlang'ich qiymatlar olinadi)
+        let allSalesData = JSON.parse(localStorage.getItem('hisvex_allSalesData')) || [
+            { id: 'SOT-1098', datePeriod: 'today', datetime: '16:42', customer: 'Jasur Aliyev', items: "iPhone 15 Pro", amount: 13500000, profit: 2500000, payment: 'Aralash', status: 'Bajarildi' },
+            { id: 'SOT-1097', datePeriod: 'today', datetime: '14:15', customer: 'Oddiy Xaridor', items: "AirPods Pro 2", amount: 3100000, profit: 600000, payment: 'Naqd', status: 'Bajarildi' }
+        ];
+
+        let productsData = JSON.parse(localStorage.getItem('hisvex_productsData')) || [
+            { name: 'iPhone 15 Pro 128GB', cost: 11000000, price: 13500000, stock: 4 },
+            { name: 'AirPods Pro 2', cost: 2500000, price: 3100000, stock: 2 },
+            { name: 'MacBook Air M2', cost: 11800000, price: 14200000, stock: 12 },
+            { name: 'Samsung Galaxy S24', cost: 9000000, price: 11000000, stock: 3 }
+        ];
+
+        let customersData = JSON.parse(localStorage.getItem('hisvex_customersData')) || [
+            { name: 'Jasur Aliyev', phone: '+998 90 123 45 67', debt: 2100000 },
+            { name: 'Sardor Rahimov', phone: '+998 93 987 65 43', debt: 0 }
+        ];
+
+        let MONTHLY_TARGET = Number(localStorage.getItem('hisvex_monthlyTarget')) || 50000000;
+        let STORE_NAME = localStorage.getItem('hisvex_storeName') || "Hisvex Central Market";
+
+        let activeDateFilter = 'today';
+        window.selectedProduct = null;
+        window.selectedPaymentType = 'Naqd';
+        window.activeDebtCustomer = null;
+        window.activeEditProduct = null;
+        let salesChartInstance = null;
+        let paymentChartInstance = null;
+
+        // Barcha o'zgarishlarni localStorage'ga saqlash funksiyasi
+        function saveAppData() {
+            localStorage.setItem('hisvex_allSalesData', JSON.stringify(allSalesData));
+            localStorage.setItem('hisvex_productsData', JSON.stringify(productsData));
+            localStorage.setItem('hisvex_customersData', JSON.stringify(customersData));
+            localStorage.setItem('hisvex_monthlyTarget', MONTHLY_TARGET);
+            localStorage.setItem('hisvex_storeName', STORE_NAME);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const sidebar = document.getElementById('sidebar');
+            const toggleSidebarBtn = document.getElementById('toggleSidebar');
+
+            if (themeToggleBtn) themeToggleBtn.addEventListener('click', () => document.documentElement.classList.toggle('dark'));
+            if (toggleSidebarBtn && sidebar) toggleSidebarBtn.addEventListener('click', () => sidebar.classList.toggle('hidden'));
+
+            // Do'kon nomini va sozlamalarni inputlarga o'rnatish
+            document.getElementById('storeNameHeader').innerText = STORE_NAME;
+            document.getElementById('receiptStoreSubtitle').innerText = STORE_NAME.toUpperCase();
+            document.getElementById('settingsStoreName').value = STORE_NAME;
+            document.getElementById('settingsMonthlyTarget').value = MONTHLY_TARGET;
+
+            initCharts();
+            switchTab('dashboard');
+        });
+
+        window.showAlert = function(message, type = 'info') {
+            const area = document.getElementById('notificationArea');
+            if (!area) return;
+            const alertDiv = document.createElement('div');
+            const bgColors = type === 'error' ? 'bg-red-500' : (type === 'success' ? 'bg-emerald-600' : 'bg-blue-600');
+            
+            alertDiv.className = `${bgColors} text-white px-4 py-2.5 rounded-xl shadow-lg mb-3 flex items-center justify-between text-xs transition-all`;
+            alertDiv.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()" class="ml-4 font-bold">&times;</button>`;
+            area.appendChild(alertDiv);
+            setTimeout(() => { if (alertDiv.parentElement) alertDiv.remove(); }, 3000);
+        };
+
+        window.switchTab = function(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.add('hidden'));
+
+            const activeTab = document.getElementById('tab-' + tabName);
+            if (activeTab) activeTab.classList.remove('hidden');
+
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if (item.getAttribute('data-tab') === tabName) {
+                    item.className = "nav-item w-full flex items-center space-x-3 px-4 py-2.5 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-xl font-semibold text-sm transition-colors shadow-sm";
+                } else {
+                    item.className = "nav-item w-full flex items-center space-x-3 px-4 py-2.5 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 rounded-xl font-medium text-sm transition-colors";
+                }
+            });
+
+            const pageTitle = document.getElementById('pageTitle');
+            const titles = {
+                'dashboard': 'Bosh Sahifa',
+                'sales': 'Sotuvlar Boshqaruvi',
+                'products': 'Mahsulotlar Bazasi',
+                'customers': 'Mijozlar Ro\'yxati',
+                'warehouse': 'Omborxona Nazorati',
+                'reports': 'Moliyaviy Hisobotlar',
+                'settings': 'Tizim Sozlamalari'
+            };
+            if (pageTitle && titles[tabName]) pageTitle.innerText = titles[tabName];
+
+            if (window.innerWidth < 768) {
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar && !sidebar.classList.contains('hidden')) sidebar.classList.add('hidden');
+            }
+
+            if (tabName === 'sales') renderSalesDashboard();
+            if (tabName === 'products') renderProductsTable();
+            if (tabName === 'customers') renderCustomersTable();
+            if (tabName === 'warehouse') renderWarehouseLowStock();
+            if (tabName === 'reports') renderReportsData();
+            updateDashboardWidgets();
+        };
+
+        window.openNewSaleModal = function() {
+            window.selectedProduct = null;
+            document.getElementById('aralashInputs').classList.add('hidden');
+            document.getElementById('nasiyaInputs').classList.add('hidden');
+            document.getElementById('discountPercent').value = '';
+            document.getElementById('discountAmount').value = '';
+            document.getElementById('finalPriceDisplay').innerText = '';
+            renderPOSProducts();
+            renderPOSCustomerSelect();
+            document.getElementById('newSaleModal').classList.remove('hidden');
+        };
+
+        window.closeNewSaleModal = function() {
+            document.getElementById('newSaleModal').classList.add('hidden');
+        };
+
+        window.completeSale = function() {
+            if (!window.selectedProduct) {
+                showAlert("Iltimos, ro'yxatdan bitta mahsulotni tanlang!", 'error');
+                return;
+            }
+
+            const discAmount = Number(document.getElementById('discountAmount').value) || 0;
+            const finalPrice = window.selectedProduct.price - discAmount;
+
+            if (finalPrice < 0) {
+                showAlert("Chegirma narxidan oshib ketdi!", "error");
+                return;
+            }
+
+            const customerName = document.getElementById('customerSelect').value;
+            let paymentDetails = window.selectedPaymentType;
+
+            if (window.selectedPaymentType === 'Aralash') {
+                const naqdVal = Number(document.getElementById('aralashNaqd').value) || 0;
+                const clickVal = Number(document.getElementById('aralashClick').value) || 0;
+                if (naqdVal + clickVal !== finalPrice) {
+                    showAlert("Aralash to'lov summalari yakuniy narxga teng bo'lishi kerak!", "error");
+                    return;
+                }
+                paymentDetails = `Aralash (Naqd: ${naqdVal.toLocaleString()} + Click: ${clickVal.toLocaleString()})`;
+            } else if (window.selectedPaymentType === 'Nasiya') {
+                const boshVal = Number(document.getElementById('nasiyaBoshlangich').value) || 0;
+                const muddatVal = Number(document.getElementById('nasiyaMuddati').value) || 30;
+                const qarzMiqdori = finalPrice - boshVal;
+                
+                paymentDetails = `Nasiya (Bosh: ${boshVal.toLocaleString()}, Qarz: ${qarzMiqdori.toLocaleString()}, ${muddatVal} kun)`;
+
+                const custObj = customersData.find(c => c.name === customerName);
+                if (custObj) {
+                    custObj.debt = (custObj.debt || 0) + qarzMiqdori;
+                }
+            }
+
+            if (discAmount > 0) {
+                paymentDetails += ` | Skidka: ${discAmount.toLocaleString()} UZS`;
+            }
+            
+            const prod = productsData.find(p => p.name === window.selectedProduct.name);
+            if (prod && prod.stock <= 0) {
+                showAlert("Omborda bu mahsulot qolmagan!", "error");
+                return;
+            }
+
+            if (prod) prod.stock = Math.max(0, prod.stock - 1);
+
+            const totalProfit = finalPrice - window.selectedProduct.cost;
+            const newId = 'SOT-' + Math.floor(1000 + Math.random() * 9000);
+            const now = new Date();
+            const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            allSalesData.unshift({
+                id: newId, datePeriod: 'today', datetime: timeStr, customer: customerName, items: window.selectedProduct.name + " (1ta)", amount: finalPrice, profit: totalProfit, payment: paymentDetails, status: 'Bajarildi'
+            });
+            
+            saveAppData(); // Ma'lumotni saqlash
+            closeNewSaleModal();
+            showReceipt(newId, customerName, finalPrice.toLocaleString() + " UZS", paymentDetails, timeStr);
+            showAlert("Sotuv muvaffaqiyatli yakunlandi!", "success");
+            
+            window.selectedProduct = null;
+            renderSalesDashboard();
+            updateDashboardWidgets();
+        };
+
+        function updateDashboardWidgets() {
+            const countEl = document.getElementById('dashActiveCustomersCount');
+            if (countEl) countEl.innerText = customersData.length + " ta";
+            
+            const lowStockItems = productsData.filter(p => p.stock < 5);
+            const lowEl = document.getElementById('dashLowStockCount');
+            if (lowEl) lowEl.innerText = lowStockItems.length + " xil";
+            
+            const descEl = document.getElementById('dashLowStockDesc');
+            if (descEl) descEl.innerText = lowStockItems.length > 0 ? lowStockItems.map(i => i.name).join(', ') : "Minimal limitdan kam tovar yo'q";
+
+            const totalMonthSales = allSalesData.reduce((acc, curr) => acc + curr.amount, 0);
+            const planPercent = Math.min(100, Math.round((totalMonthSales / MONTHLY_TARGET) * 100));
+            
+            const pEl = document.getElementById('dashMonthlyPlanPercent');
+            if (pEl) pEl.innerText = planPercent + "%";
+            
+            const tEl = document.getElementById('dashMonthlyPlanText');
+            if (tEl) tEl.innerText = `${(totalMonthSales / 1000000).toFixed(1)}M / ${(MONTHLY_TARGET / 1000000).toFixed(0)}M UZS`;
+            
+            const barEl = document.getElementById('dashMonthlyProgressBar');
+            if (barEl) barEl.style.width = planPercent + "%";
+        }
+
+        window.setDateFilter = function(period) {
+            activeDateFilter = period;
+            document.querySelectorAll('#dateFilterGroup .date-filter-btn').forEach(btn => {
+                btn.className = btn.getAttribute('data-filter') === period ? 
+                    "date-filter-btn flex-1 sm:flex-none px-3 py-1.5 text-xs font-semibold bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 rounded-lg shadow-sm whitespace-nowrap" :
+                    "date-filter-btn flex-1 sm:flex-none px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 whitespace-nowrap";
+            });
+            renderSalesDashboard();
+        };
+
+        function renderSalesDashboard() {
+            let filtered = [];
+            let titleText = "Bugungi Sotuv";
+
+            if (activeDateFilter === 'today') {
+                filtered = allSalesData.filter(i => i.datePeriod === 'today');
+                titleText = "Bugungi Sotuv";
+            } else if (activeDateFilter === 'yesterday') {
+                filtered = allSalesData.filter(i => i.datePeriod === 'yesterday');
+                titleText = "Kechagi Sotuv";
+            } else if (activeDateFilter === 'week') {
+                filtered = allSalesData.filter(i => i.datePeriod === 'today' || i.datePeriod === 'yesterday' || i.datePeriod === 'week');
+                titleText = "Haftalik Sotuv";
+            } else {
+                filtered = [...allSalesData];
+                titleText = "Oylik Sotuv";
+            }
+
+            const totalSum = filtered.reduce((acc, curr) => acc + curr.amount, 0);
+            const totalProfit = filtered.reduce((acc, curr) => acc + (curr.profit || 0), 0);
+            const count = filtered.length;
+
+            document.getElementById('kpiSalesTitle').innerText = titleText;
+            document.getElementById('kpiSalesTotal').innerText = totalSum.toLocaleString() + " UZS";
+            document.getElementById('kpiSalesCount').innerText = count + " ta";
+            document.getElementById('kpiAvgCheck').innerText = (count > 0 ? Math.round(totalSum / count) : 0).toLocaleString() + " UZS";
+            document.getElementById('kpiNetProfit').innerText = totalProfit.toLocaleString() + " UZS";
+
+            filterSalesTable(filtered);
+            updateChartsData(filtered);
+        }
+
+        window.filterSalesTable = function(data = null) {
+            if (!data) {
+                if (activeDateFilter === 'today') data = allSalesData.filter(i => i.datePeriod === 'today');
+                else if (activeDateFilter === 'yesterday') data = allSalesData.filter(i => i.datePeriod === 'yesterday');
+                else if (activeDateFilter === 'week') data = allSalesData.filter(i => i.datePeriod === 'today' || i.datePeriod === 'yesterday' || i.datePeriod === 'week');
+                else data = [...allSalesData];
+            }
+
+            const paymentFilter = document.getElementById('paymentFilterSelect').value;
+            const searchQuery = (document.getElementById('tableSearchInput')?.value || '').toLowerCase();
+
+            let finalData = data.filter(item => {
+                const isMatch = paymentFilter === 'all' || item.payment.includes(paymentFilter);
+                return isMatch && (item.id.toLowerCase().includes(searchQuery) || item.customer.toLowerCase().includes(searchQuery));
+            });
+
+            const tbody = document.getElementById('salesTableBody');
+            document.getElementById('totalItemsCount').innerText = finalData.length;
+
+            if (finalData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-6 text-center text-slate-400 text-xs">Ma'lumot topilmadi</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = finalData.map(item => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition">
+                    <td class="px-4 sm:px-6 py-3 font-bold text-blue-600 dark:text-blue-400">${item.id}</td>
+                    <td class="px-4 sm:px-6 py-3 text-xs">${item.datetime}</td>
+                    <td class="px-4 sm:px-6 py-3 font-medium text-slate-900 dark:text-white">${item.customer}</td>
+                    <td class="px-4 sm:px-6 py-3 text-xs">${item.items}</td>
+                    <td class="px-4 sm:px-6 py-3"><span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-slate-100 dark:bg-slate-800">${item.payment}</span></td>
+                    <td class="px-4 sm:px-6 py-3 font-bold">${item.amount.toLocaleString()} UZS</td>
+                    <td class="px-4 sm:px-6 py-3"><span class="px-2 py-0.5 rounded-full text-[11px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-400">${item.status}</span></td>
+                    <td class="px-4 sm:px-6 py-3 text-right space-x-1">
+                        <button onclick="showReceipt('${item.id}', '${item.customer}', '${item.amount.toLocaleString()} UZS', '${item.payment}', '${item.datetime}')" class="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg text-slate-500" title="Chek"><i data-lucide="printer" class="w-4 h-4"></i></button>
+                        <button onclick="deleteSale('${item.id}')" class="p-1 hover:bg-red-100 dark:hover:bg-red-900/40 rounded-lg text-red-500" title="O'chirish"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        };
+
+        window.deleteSale = function(saleId) {
+            const saleIndex = allSalesData.findIndex(s => s.id === saleId);
+            if (saleIndex === -1) return;
+
+            const sale = allSalesData[saleIndex];
+            for (let prod of productsData) {
+                if (sale.items.includes(prod.name)) {
+                    prod.stock += 1;
+                    break;
+                }
+            }
+
+            allSalesData.splice(saleIndex, 1);
+            saveAppData();
+            renderSalesDashboard();
+            updateDashboardWidgets();
+            renderProductsTable();
+            showAlert(`Sotuv (${saleId}) o'chirildi va qoldiq tiklandi!`, "success");
+        };
+
+        function renderProductsTable() {
+            const tbody = document.getElementById('productsTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = productsData.map(p => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                    <td class="px-3 py-3 font-semibold text-slate-900 dark:text-white">${p.name}</td>
+                    <td class="px-2 py-3 text-slate-500 whitespace-nowrap text-[11px]">${p.cost.toLocaleString()}</td>
+                    <td class="px-2 py-3 text-blue-600 font-bold whitespace-nowrap text-[11px]">${p.price.toLocaleString()}</td>
+                    <td class="px-2 py-3 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-semibold ${p.stock < 5 ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">${p.stock} ta</span></td>
+                    <td class="px-3 py-3 text-right whitespace-nowrap">
+                        <div class="inline-flex items-center space-x-1">
+                            <button onclick="openEditProductModal('${p.name}')" class="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[10px] font-semibold">Tahrir</button>
+                            <button onclick="deleteProduct('${p.name}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-md text-[10px] font-semibold">O'chirish</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.openEditProductModal = function(productName) {
+            window.activeEditProduct = productsData.find(p => p.name === productName);
+            if (!window.activeEditProduct) return;
+            document.getElementById('editProductTitle').innerText = `${productName} - Tahrirlash`;
+            document.getElementById('editProdStock').value = window.activeEditProduct.stock;
+            document.getElementById('editProdPrice').value = window.activeEditProduct.price;
+            document.getElementById('editProductModal').classList.remove('hidden');
+        };
+
+        window.closeEditProductModal = function() {
+            document.getElementById('editProductModal').classList.add('hidden');
+        };
+
+        window.confirmEditProduct = function() {
+            const newStock = Number(document.getElementById('editProdStock').value);
+            const newPrice = Number(document.getElementById('editProdPrice').value);
+            if (isNaN(newStock) || isNaN(newPrice) || newStock < 0 || newPrice <= 0) {
+                showAlert("Ma'lumotlarni to'g'ri kiriting!", "error");
+                return;
+            }
+            window.activeEditProduct.stock = newStock;
+            window.activeEditProduct.price = newPrice;
+            saveAppData();
+            closeEditProductModal();
+            renderProductsTable();
+            updateDashboardWidgets();
+            showAlert("Mahsulot ma'lumotlari yangilandi!", "success");
+        };
+
+        window.openProductModal = function() {
+            document.getElementById('productModal').classList.remove('hidden');
+        };
+
+        window.closeProductModal = function() {
+            document.getElementById('productModal').classList.add('hidden');
+        };
+
+        window.saveNewProduct = function() {
+            const name = document.getElementById('newProdName').value;
+            const cost = Number(document.getElementById('newProdCost').value);
+            const price = Number(document.getElementById('newProdPrice').value);
+            const stock = Number(document.getElementById('newProdStock').value);
+            if (!name || !price || !cost || cost >= price) { showAlert("Ma'lumotlarni to'g'ri kiriting!", "error"); return; }
+            productsData.push({ name, cost, price, stock });
+            saveAppData();
+            closeProductModal();
+            renderProductsTable();
+            updateDashboardWidgets();
+            showAlert("Mahsulot qo'shildi!", "success");
+        };
+
+        window.deleteProduct = function(name) {
+            productsData = productsData.filter(p => p.name !== name);
+            saveAppData();
+            renderProductsTable();
+            updateDashboardWidgets();
+            showAlert("Mahsulot ombordan o'chirildi", "info");
+        };
+
+        function renderCustomersTable() {
+            const tbody = document.getElementById('customersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = customersData.map(c => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+                    <td class="px-4 py-3 font-semibold text-slate-900 dark:text-white">${c.name}</td>
+                    <td class="px-4 py-3 text-slate-600 dark:text-slate-300">${c.phone}</td>
+                    <td class="px-4 py-3 font-bold ${(c.debt || 0) > 0 ? 'text-red-500' : 'text-emerald-500'}">${(c.debt || 0).toLocaleString()} UZS</td>
+                    <td class="px-4 py-3 text-right whitespace-nowrap space-x-1">
+                        ${(c.debt || 0) > 0 ? `<button onclick="openPayDebtModal('${c.name}')" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-[11px] font-semibold">To'lov</button>` : ''}
+                        <button onclick="deleteCustomer('${c.name}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-[11px] font-semibold">O'chirish</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.openPayDebtModal = function(customerName) {
+            window.activeDebtCustomer = customersData.find(c => c.name === customerName);
+            if (!window.activeDebtCustomer) return;
+            document.getElementById('payDebtTitle').innerText = `${customerName} - Qarzini to'lash`;
+            document.getElementById('debtPaymentAmount').value = window.activeDebtCustomer.debt;
+            document.getElementById('payDebtModal').classList.remove('hidden');
+        };
+
+        window.closePayDebtModal = function() {
+            document.getElementById('payDebtModal').classList.add('hidden');
+        };
+
+        window.confirmPayDebt = function() {
+            const payAmt = Number(document.getElementById('debtPaymentAmount').value) || 0;
+            if (payAmt <= 0) {
+                showAlert("Summani to'g'ri kiriting!", "error");
+                return;
+            }
+            if (payAmt > window.activeDebtCustomer.debt) {
+                showAlert("To'lov miqdori jami qarzdan oshib ketdi!", "error");
+                return;
+            }
+
+            window.activeDebtCustomer.debt -= payAmt;
+            saveAppData();
+            closePayDebtModal();
+            renderCustomersTable();
+            showAlert(`${payAmt.toLocaleString()} UZS qarz qabul qilindi!`, "success");
+        };
+
+        window.openCustomerModal = function() {
+            document.getElementById('customerModal').classList.remove('hidden');
+        };
+
+        window.closeCustomerModal = function() {
+            document.getElementById('customerModal').classList.add('hidden');
+        };
+
+        window.saveNewCustomer = function() {
+            const name = document.getElementById('newCustName').value;
+            const phone = document.getElementById('newCustPhone').value;
+            if (!name || !phone) { showAlert("Ma'lumotlarni to'ldiring!", "error"); return; }
+            customersData.push({ name, phone, debt: 0 });
+            saveAppData();
+            closeCustomerModal();
+            renderCustomersTable();
+            updateDashboardWidgets();
+            showAlert("Mijoz qo'shildi!", "success");
+        };
+
+        window.deleteCustomer = function(name) {
+            customersData = customersData.filter(c => c.name !== name);
+            saveAppData();
+            renderCustomersTable();
+            updateDashboardWidgets();
+            showAlert("Mijoz o'chirildi", "info");
+        };
+
+        function renderWarehouseLowStock() {
+            const low = productsData.filter(p => p.stock < 5);
+            const tbody = document.getElementById('lowStockTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = low.length === 0 ? `<tr><td colspan="4" class="px-4 py-6 text-center text-slate-400 text-xs">Kam qolgan mahsulotlar yo'q</td></tr>` :
+                low.map(p => `<tr class="hover:bg-slate-50"><td class="px-4 py-3 font-semibold">${p.name}</td><td class="px-4 py-3 text-blue-600 font-bold">${p.price.toLocaleString()} UZS</td><td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs bg-red-100 text-red-700">${p.stock} ta</span></td><td class="px-4 py-3 text-amber-600 text-xs">To'ldirish kerak</td></tr>`).join('');
+        }
+
+        function renderReportsData() {
+            const totalRev = allSalesData.reduce((acc, curr) => acc + curr.amount, 0);
+            const totalProf = allSalesData.reduce((acc, curr) => acc + (curr.profit || 0), 0);
+            const totalDebt = customersData.reduce((acc, curr) => acc + (curr.debt || 0), 0);
+
+            document.getElementById('reportTotalRevenue').innerText = totalRev.toLocaleString() + " UZS";
+            document.getElementById('reportNetProfit').innerText = totalProf.toLocaleString() + " UZS";
+            document.getElementById('reportTotalDebt').innerText = totalDebt.toLocaleString() + " UZS";
+
+            const tbody = document.getElementById('topProductsReportBody');
+            tbody.innerHTML = productsData.map(p => {
+                let soldCount = allSalesData.filter(s => s.items.includes(p.name)).length;
+                let rev = soldCount * p.price;
+                return `<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40"><td class="px-4 py-3 font-semibold">${p.name}</td><td class="px-4 py-3">${soldCount} ta</td><td class="px-4 py-3 font-bold text-blue-600">${rev.toLocaleString()} UZS</td></tr>`;
+            }).join('');
+        }
+
+        window.saveStoreName = function() {
+            const name = document.getElementById('settingsStoreName').value.trim();
+            if (!name) return;
+            STORE_NAME = name;
+            saveAppData();
+            document.getElementById('storeNameHeader').innerText = name;
+            document.getElementById('receiptStoreSubtitle').innerText = name.toUpperCase();
+            showAlert("Do'kon nomi yangilandi!", "success");
+        };
+
+        window.saveMonthlyTarget = function() {
+            const val = Number(document.getElementById('settingsMonthlyTarget').value);
+            if (!val || val <= 0) { showAlert("Qiymatni to'g'ri kiriting!", "error"); return; }
+            MONTHLY_TARGET = val;
+            saveAppData();
+            updateDashboardWidgets();
+            showAlert("Oylik savdo rejasi yangilandi!", "success");
+        };
+
+        window.resetAllData = function() {
+            if (confirm("Barcha ma'lumotlarni o'chirishni xohlaysizmi?")) {
+                localStorage.clear();
+                allSalesData = [];
+                customersData = [];
+                saveAppData();
+                renderSalesDashboard();
+                updateDashboardWidgets();
+                showAlert("Ma'lumotlar tozalandi", "info");
+            }
+        };
+
+        window.renderPOSProducts = function(search = '') {
+            const grid = document.getElementById('productsGrid');
+            if (!grid) return;
+            const filtered = productsData.filter(p => p.name.toLowerCase().includes(search.toLowerCase()));
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">Mahsulot topilmadi</p>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div onclick="selectProductForSale('${p.name}', ${p.price}, ${p.cost})" id="prod-card-${p.name}" class="product-select-card p-2.5 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700/60 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer flex items-center justify-between text-xs transition">
+                    <div>
+                        <span class="font-bold text-slate-900 dark:text-white">${p.name}</span>
+                        <div class="text-[10px] text-slate-400">Qoldiq: ${p.stock}ta</div>
+                    </div>
+                    <span class="font-bold text-blue-600 dark:text-blue-400">${p.price.toLocaleString()} UZS</span>
+                </div>
+            `).join('');
+        };
+
+        window.selectProductForSale = function(name, price, cost) {
+            window.selectedProduct = { name, price, cost };
+            document.querySelectorAll('.product-select-card').forEach(card => {
+                card.classList.remove('border-blue-600', 'bg-blue-50', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-600');
+            });
+            const activeCard = document.getElementById(`prod-card-${name}`);
+            if (activeCard) {
+                activeCard.classList.add('border-blue-600', 'bg-blue-50', 'dark:bg-blue-900/40', 'ring-2', 'ring-blue-600');
+            }
+            updateFinalPriceDisplay();
+        };
+
+        window.calculateDiscount = function(type) {
+            if (!window.selectedProduct) {
+                showAlert("Avval mahsulotni tanlang!", "error");
+                return;
+            }
+            const origPrice = window.selectedProduct.price;
+            let discAmt = 0;
+
+            if (type === 'percent') {
+                const percent = Number(document.getElementById('discountPercent').value) || 0;
+                discAmt = Math.round((origPrice * percent) / 100);
+                document.getElementById('discountAmount').value = discAmt;
+            } else {
+                discAmt = Number(document.getElementById('discountAmount').value) || 0;
+                const percent = origPrice > 0 ? ((discAmt / origPrice) * 100).toFixed(1) : 0;
+                document.getElementById('discountPercent').value = percent;
+            }
+            updateFinalPriceDisplay();
+        };
+
+        function updateFinalPriceDisplay() {
+            if (!window.selectedProduct) return;
+            const orig = window.selectedProduct.price;
+            const disc = Number(document.getElementById('discountAmount').value) || 0;
+            const final = Math.max(0, orig - disc);
+            document.getElementById('finalPriceDisplay').innerText = `Asl narx: ${orig.toLocaleString()} | Chegirma bilan: ${final.toLocaleString()} UZS`;
+
+            if (window.selectedPaymentType === 'Aralash') {
+                document.getElementById('aralashNaqd').value = final;
+                document.getElementById('aralashClick').value = 0;
+            }
+        }
+
+        function renderPOSCustomerSelect() {
+            const select = document.getElementById('customerSelect');
+            if (!select) return;
+            select.innerHTML = `<option value="Oddiy Xaridor">Oddiy Xaridor</option>` + customersData.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+        }
+
+        window.selectPayment = function(type) {
+            window.selectedPaymentType = type;
+            document.querySelectorAll('#paymentButtonsGroup .payment-btn').forEach(btn => {
+                btn.className = btn.innerText.includes(type) ? "payment-btn p-2 border rounded-xl text-xs font-semibold text-center bg-blue-600 text-white border-blue-600" : "payment-btn p-2 border rounded-xl text-xs font-semibold text-center bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700";
+            });
+
+            const aralashDiv = document.getElementById('aralashInputs');
+            const nasiyaDiv = document.getElementById('nasiyaInputs');
+
+            if (type === 'Aralash') {
+                aralashDiv.classList.remove('hidden');
+                nasiyaDiv.classList.add('hidden');
+                if (window.selectedProduct) {
+                    const disc = Number(document.getElementById('discountAmount').value) || 0;
+                    const final = window.selectedProduct.price - disc;
+                    document.getElementById('aralashNaqd').value = final;
+                    document.getElementById('aralashClick').value = 0;
+                }
+            } else if (type === 'Nasiya') {
+                nasiyaDiv.classList.remove('hidden');
+                aralashDiv.classList.add('hidden');
+            } else {
+                aralashDiv.classList.add('hidden');
+                nasiyaDiv.classList.add('hidden');
+            }
+        };
+
+        window.calculateAralash = function() {
+            if (!window.selectedProduct) return;
+            const disc = Number(document.getElementById('discountAmount').value) || 0;
+            const final = window.selectedProduct.price - disc;
+            const naqd = Number(document.getElementById('aralashNaqd').value) || 0;
+            const remaining = final - naqd;
+            if (remaining >= 0) {
+                document.getElementById('aralashClick').value = remaining;
+            }
+        };
+
+        window.showReceipt = function(id, cust, total, pay, time) {
+            document.getElementById('receiptContent').innerHTML = `<div><b>Chek:</b> #${id}</div><div><b>Vaqt:</b> ${time}</div><div><b>Mijoz:</b> ${cust}</div><div><b>To'lov:</b> ${pay}</div><div class="border-t pt-1 font-bold">Jami: ${total}</div>`;
+            document.getElementById('receiptModal').classList.remove('hidden');
+        };
+
+        window.exportTableToExcel = function() {
+            if (allSalesData.length === 0) {
+                showAlert("Eksport uchun ma'lumot mavjud emas!", "error");
+                return;
+            }
+
+            let csvContent = "\uFEFFID,Sana va Vaqt,Mijoz,Mahsulotlar,To'lov Usuli,Summa (UZS),Sof Foyda (UZS),Holati\n";
+            allSalesData.forEach(row => {
+                csvContent += `"${row.id}","${row.datetime}","${row.customer}","${row.items}","${row.payment}",${row.amount},${row.profit || 0},"${row.status}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Hisvex_Sotuvlar_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showAlert("Sotuvlar hisoboti muvaffaqiyatli yuklab olindi!", "success");
+        };
+
+        function initCharts() {
+            const ctxSales = document.getElementById('salesChart');
+            const ctxPay = document.getElementById('paymentMethodChart');
+            if (!ctxSales || !ctxPay) return;
+
+            salesChartInstance = new Chart(ctxSales.getContext('2d'), {
+                type: 'line', data: { labels: ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'], datasets: [{ data: [0,0,0,0,0,0], borderColor: '#2563eb', fill: true, backgroundColor: 'rgba(37,99,235,0.05)' }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+            });
+            paymentChartInstance = new Chart(ctxPay.getContext('2d'), {
+                type: 'doughnut', data: { labels: ['Naqd', 'Click', 'Nasiya', 'Aralash'], datasets: [{ data: [0,0,0,0], backgroundColor: ['#2563eb', '#10b981', '#f59e0b', '#a855f7'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '75%' }
+            });
+        }
+
+        function updateChartsData(data) {
+            if (!salesChartInstance || !paymentChartInstance) return;
+            let n = 0, c = 0, ns = 0, a = 0;
+            data.forEach(i => { 
+                if (i.payment.includes('Naqd')) n += i.amount; 
+                else if (i.payment.includes('Click')) c += i.amount; 
+                else if (i.payment.includes('Nasiya')) ns += i.amount; 
+                else a += i.amount; 
+            });
+            
+            const total = n + c + ns + a;
+            const pN = total > 0 ? Math.round((n / total) * 100) : 0;
+            const pC = total > 0 ? Math.round((c / total) * 100) : 0;
+            const pNs = total > 0 ? Math.round((ns / total) * 100) : 0;
+            const pA = total > 0 ? Math.round((a / total) * 100) : 0;
+
+            const lN = document.getElementById('legendNaqd');
+            const lC = document.getElementById('legendClick');
+            const lNs = document.getElementById('legendNasiya');
+            const lA = document.getElementById('legendAralash');
+
+            if (lN) lN.innerText = `Naqd: ${pN}%`;
+            if (lC) lC.innerText = `Click: ${pC}%`;
+            if (lNs) lNs.innerText = `Nasiya: ${pNs}%`;
+            if (lA) lA.innerText = `Aralash: ${pA}%`;
+
+            paymentChartInstance.data.datasets[0].data = [n, c, ns, a]; 
+            paymentChartInstance.update();
+
+            salesChartInstance.data.datasets[0].data = [0, 0, 0, 0, 0, total]; 
+            salesChartInstance.update();
+        }
+    </script>
+</body>
+</html>
